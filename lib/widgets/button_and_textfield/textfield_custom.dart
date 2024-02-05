@@ -6,9 +6,13 @@ import 'package:google_fonts/google_fonts.dart';
 class CustomTextfiled extends StatelessWidget {
   CustomTextfiled(
       {super.key,
+      this.keyboardType,
+      this.obsecure,
       required this.controller,
       required this.text,
       required this.validator});
+    TextInputType? keyboardType;
+  bool? obsecure;
   TextEditingController controller;
   String? Function(String?)? validator;
   String text;
@@ -17,8 +21,10 @@ class CustomTextfiled extends StatelessWidget {
     return SizedBox(
       height: 70,
       child: TextFormField(
+        keyboardType: keyboardType?? TextInputType.name,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: validator,
+        obscureText: obsecure ?? false,
         style: GoogleFonts.outfit(color: black),
         controller: controller,
         decoration: InputDecoration(

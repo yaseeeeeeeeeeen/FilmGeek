@@ -1,14 +1,16 @@
 import 'package:filmgeek/model/movie_model.dart';
 import 'package:filmgeek/utils/colors.dart';
+import 'package:filmgeek/utils/font_styles.dart';
 import 'package:filmgeek/widgets/movie_card.dart';
+import 'package:filmgeek/widgets/rich_text.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key, required this.movieList});
   List<Movie> movieList;
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: AppBar(
           actions: [
@@ -17,8 +19,34 @@ class HomeScreen extends StatelessWidget {
                   showModalBottomSheet(
                       context: context,
                       builder: (context) => Container(
-                          height: MediaQuery.sizeOf(context).height / 2.5,
-                          color: Colors.amberAccent));
+                            height: media.height / 4,
+                            width: media.width,
+                            padding: const EdgeInsets.all(15),
+                            color: white,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    "Company Info",
+                                    style: FontStyles.appbarTitle,
+                                  ),
+                                  AboutRichText(
+                                      textOne: "Company",
+                                      textTwo:
+                                          "Geeksynergy Technologies Pvt Ltd"),
+                                  AboutRichText(
+                                      textOne: "Address",
+                                      textTwo: "Sanjayanagar, Bengaluru-56"),
+                                  AboutRichText(
+                                      textOne: "Phone", textTwo: "8848917803"),
+                                  AboutRichText(
+                                      textOne: "Email",
+                                      textTwo:
+                                          "geeksynergytechnolagies@gmail.com")
+                                ]),
+                          ));
                 },
                 icon: const Icon(
                   Icons.info_outline_rounded,
@@ -27,9 +55,7 @@ class HomeScreen extends StatelessWidget {
                 color: blue)
           ],
           backgroundColor: white,
-          title: Text('FilmGeek',
-              style: GoogleFonts.outfit(
-                  color: blue, fontSize: 23, fontWeight: FontWeight.w600))),
+          title: Text('FilmGeek', style: FontStyles.appbarTitle)),
       backgroundColor: scaffold,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),

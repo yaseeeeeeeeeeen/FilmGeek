@@ -54,7 +54,7 @@ class MovieCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  "Gener : ${movie.genre.toUpperCase()}",
+                  "Gener : ${movie.genre}",
                   overflow: TextOverflow.ellipsis,
                   style: FontStyles.subTitles,
                 ),

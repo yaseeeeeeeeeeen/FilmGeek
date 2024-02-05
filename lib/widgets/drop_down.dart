@@ -1,4 +1,5 @@
 import 'package:filmgeek/utils/colors.dart';
+import 'package:filmgeek/utils/font_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -51,7 +52,7 @@ class _DropdownDemoState extends State<DropdownDemo> {
             .map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
-            child: Text(value),
+            child: ListTile(title: Text(value, style: FontStyles.subTitles)),
           );
         }).toList(),
       ),

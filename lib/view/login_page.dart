@@ -38,7 +38,7 @@ class LoginPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: media.height / 4),
+                  SizedBox(height: media.height / 4.5),
                   const AppNameCard(),
                   CustomTextfiled(
                       validator: (p0) => Validations().emailValidation(p0),
@@ -46,6 +46,7 @@ class LoginPage extends StatelessWidget {
                       text: "Email"),
                   const SizedBox(height: 10),
                   CustomTextfiled(
+                      obsecure: true,
                       validator: (p0) => Validations().passwordValidations(p0),
                       controller: passwordController,
                       text: "Password"),

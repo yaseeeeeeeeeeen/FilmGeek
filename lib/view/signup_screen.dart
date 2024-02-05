@@ -57,6 +57,7 @@ class SignupScreen extends StatelessWidget {
                     ),
                     DropdownDemo(professionController: proffiessionController),
                     CustomTextfiled(
+                        keyboardType: TextInputType.number,
                         controller: phoneController,
                         text: "Phone",
                         validator: (p0) =>
@@ -65,6 +66,7 @@ class SignupScreen extends StatelessWidget {
                     CustomTextfiled(
                         controller: passwordController,
                         text: "Password",
+                        obsecure: true,
                         validator: (p0) =>
                             Validations().passwordValidations(p0)),
                     const SizedBox(height: 10),
