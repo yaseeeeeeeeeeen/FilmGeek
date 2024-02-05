@@ -1,3 +1,4 @@
+import 'package:filmgeek/repository/movie_repository.dart';
 import 'package:filmgeek/sevices/services.dart';
 import 'package:filmgeek/utils/colors.dart';
 import 'package:filmgeek/utils/image_urls.dart';
@@ -49,7 +50,11 @@ class LoginPage extends StatelessWidget {
                       controller: passwordController,
                       text: "Password"),
                   const SizedBox(height: 10),
-                  CustomButton(onPressed: () {}, title: "LOGIN"),
+                  CustomButton(
+                      onPressed: () {
+                        loginClicked(context);
+                      },
+                      title: "LOGIN"),
                   SizedBox(height: media.height / 3.8),
                   GestureDetector(
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -85,11 +90,17 @@ class LoginPage extends StatelessWidget {
       bool isVerified = await DatabaseHelper.instance
           .login(emailController.text, passwordController.text);
       if (isVerified) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
-            ),
-            (route) => false);
+        final eitherResponse = await MovieRepository().getMovies();
+        eitherResponse.fold((left) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(customSnackbar(context, false, left.message));
+        }, (right) {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(movieList: right),
+              ),
+              (route) => false);
+        });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
             customSnackbar(context, false, "Email or Password is Incorrect"));

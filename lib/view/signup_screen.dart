@@ -1,4 +1,5 @@
 import 'package:filmgeek/model/user_model.dart';
+import 'package:filmgeek/repository/movie_repository.dart';
 import 'package:filmgeek/sevices/services.dart';
 import 'package:filmgeek/utils/colors.dart';
 import 'package:filmgeek/utils/image_urls.dart';
@@ -116,11 +117,17 @@ class SignupScreen extends StatelessWidget {
             isLoggedIn: 1);
         bool isAdded = await DatabaseHelper.instance.addUserDetails(user);
         if (isAdded) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) => HomeScreen(),
-              ),
-              (route) => false);
+          final eitherResponse = await MovieRepository().getMovies();
+          eitherResponse.fold((left) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(customSnackbar(context, false, left.message));
+          }, (right) {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => HomeScreen(movieList: right),
+                ),
+                (route) => false);
+          });
         } else {
           ScaffoldMessenger.of(context).showSnackBar(customSnackbar(
               context, false, "Something Went Wrong, Try Again"));

@@ -60,14 +60,16 @@ class DatabaseHelper {
       return result.isEmpty;
     } catch (e) {
       print('Error checking email availability: $e');
-      return false; 
+      return false;
     }
   }
 
   Future<bool> addUserDetails(User user) async {
     try {
+      print(user);
       Database? db = await instance.database;
       await db!.insert(dbTable, user.toMap());
+      print("Added");
       return true;
     } catch (e) {
       print('Error inserting user: $e');
@@ -77,13 +79,14 @@ class DatabaseHelper {
 
   Future<bool> login(String email, String password) async {
     try {
+      print("Inside Login");
       Database? db = await instance.database;
       List<Map<String, dynamic>> result = await db!.query(
         dbTable,
         where: '$columnEmail = ? AND $columnPassword = ?',
         whereArgs: [email, password],
       );
-
+      print(result.isNotEmpty);
       return result.isNotEmpty;
     } catch (e) {
       print('Error during login: $e');
@@ -97,13 +100,13 @@ class DatabaseHelper {
       List<Map<String, dynamic>> result = await db!.query(
         dbTable,
         where: '$columnEmail = ? AND $columnIsLoggedIn = ?',
-        whereArgs: [email, 1], 
+        whereArgs: [email, 1],
       );
 
       return result.isNotEmpty;
     } catch (e) {
       print('Error checking user login status: $e');
-      return false; 
+      return false;
     }
   }
 }

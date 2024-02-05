@@ -21,12 +21,12 @@ class User {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'userName': userName,
+      'user_name': userName,
       'email': email,
       'password': password,
-      'phoneNumber': phoneNumber,
+      'phone_number': phoneNumber,
       'profession': profession,
-      'isLoggedIn': isLoggedIn,
+      'is_logged_in': isLoggedIn,
     };
   }
 
@@ -34,12 +34,12 @@ class User {
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
       id: map['id'],
-      userName: map['userName'],
+      userName: map['user_name'],
       email: map['email'],
       password: map['password'],
-      phoneNumber: map['phoneNumber'],
+      phoneNumber: map['phone_number'],
       profession: map['profession'],
-      isLoggedIn: map['isLoggedIn'],
+      isLoggedIn: map['is_logged_in'],
     );
   }
 }
