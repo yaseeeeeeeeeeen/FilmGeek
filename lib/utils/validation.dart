@@ -7,7 +7,7 @@ class Validations {
     return null;
   }
 
-  String? passwordValidations(String value) {
+  String? passwordValidations(value) {
     if (value.length < 7) {
       return 'Password must have 8 letters';
     } else {
