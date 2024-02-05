@@ -55,7 +55,9 @@ class HomeScreen extends StatelessWidget {
                 color: blue)
           ],
           backgroundColor: white,
-          title: Text('FilmGeek', style: FontStyles.appbarTitle)),
+          title: Hero(
+              tag: "AppTitle",
+              child: Text('FilmGeek', style: FontStyles.appbarTitle))),
       backgroundColor: scaffold,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
