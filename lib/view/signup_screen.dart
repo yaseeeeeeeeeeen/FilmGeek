@@ -1,6 +1,9 @@
+import 'package:filmgeek/model/user_model.dart';
+import 'package:filmgeek/sevices/services.dart';
 import 'package:filmgeek/utils/colors.dart';
 import 'package:filmgeek/utils/image_urls.dart';
 import 'package:filmgeek/utils/validation.dart';
+import 'package:filmgeek/view/home_screen.dart';
 import 'package:filmgeek/view/login_page.dart';
 import 'package:filmgeek/widgets/app_title.dart';
 import 'package:filmgeek/widgets/button_and_textfield/custom_button.dart';
@@ -66,7 +69,7 @@ class SignupScreen extends StatelessWidget {
                     const SizedBox(height: 10),
                     CustomButton(
                         onPressed: () => signupClicked(context),
-                        title: "SIGN-IN"),
+                        title: "SIGN-UP"),
                     SizedBox(height: media.height / 7),
                     GestureDetector(
                       onTap: () => Navigator.of(context).push(
@@ -101,6 +104,28 @@ class SignupScreen extends StatelessWidget {
 
   signupClicked(context) async {
     if (signupKey.currentState!.validate()) {
+      bool isAvailable = await DatabaseHelper.instance
+          .checkEmailAvailability(emailController.text);
+      if (isAvailable) {
+        User user = User(
+            userName: usernameController.text,
+            email: emailController.text,
+            password: passwordController.text,
+            phoneNumber: phoneController.text,
+            profession: proffiessionController.text,
+            isLoggedIn: 1);
+        bool isAdded = await DatabaseHelper.instance.addUserDetails(user);
+        if (isAdded) {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(),
+              ),
+              (route) => false);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(customSnackbar(
+              context, false, "Something Went Wrong, Try Again"));
+        }
+      }
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(customSnackbar(context, false, "Fill all Datas"));
