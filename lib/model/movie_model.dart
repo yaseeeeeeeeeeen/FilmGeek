@@ -1,64 +1,129 @@
+// To parse this JSON data, do
+//
+//     final movie = movieFromJson(jsonString);
+
+import 'dart:convert';
+
+Movie movieFromJson(String str) => Movie.fromJson(json.decode(str));
+
+String movieToJson(Movie data) => json.encode(data.toJson());
+
 class Movie {
-  final String id;
-  final List<String> director;
-  final List<String> writers;
-  final List<String> stars;
-  final int releasedDate;
-  final List<String> productionCompany;
-  final String title;
-  final String language;
-  final dynamic runTime;
-  final String genre;
-  final List<Map<String, dynamic>> voted;
-  final String poster;
-  final int pageViews;
-  final String description;
-  final List<String> upVoted;
-  final List<String> downVoted;
-  final int totalVoted;
-  final int voting;
+    int page;
+    List<Result> results;
+    int totalPages;
+    int totalResults;
 
-  Movie({
-    required this.id,
-    required this.director,
-    required this.writers,
-    required this.stars,
-    required this.releasedDate,
-    required this.productionCompany,
-    required this.title,
-    required this.language,
-    required this.runTime,
-    required this.genre,
-    required this.voted,
-    required this.poster,
-    required this.pageViews,
-    required this.description,
-    required this.upVoted,
-    required this.downVoted,
-    required this.totalVoted,
-    required this.voting,
-  });
+    Movie({
+        required this.page,
+        required this.results,
+        required this.totalPages,
+        required this.totalResults,
+    });
 
-  factory Movie.fromJson(Map<String, dynamic> json) {
-    return Movie(
-      id: json['_id'],
-      director: List<String>.from(json['director']),
-      writers: List<String>.from(json['writers']),
-      stars: List<String>.from(json['stars']),
-      releasedDate: json['releasedDate'],
-      productionCompany: List<String>.from(json['productionCompany']),
-      title: json['title'],
-      language: json['language'],
-      runTime: json['runTime'],
-      genre: json['genre'],
-      voted: List<Map<String, dynamic>>.from(json['voted']),
-      poster: json['poster'],
-      pageViews: json['pageViews'],
-      description: json['description'],
-      upVoted: List<String>.from(json['upVoted'] ?? []),
-      downVoted: List<String>.from(json['downVoted'] ?? []),
-      totalVoted: json['totalVoted'],
-      voting: json['voting'],
+    factory Movie.fromJson(Map<String, dynamic> json) => Movie(
+        page: json["page"],
+        results: List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
+        totalPages: json["total_pages"],
+        totalResults: json["total_results"],
     );
-  }
+
+    Map<String, dynamic> toJson() => {
+        "page": page,
+        "results": List<dynamic>.from(results.map((x) => x.toJson())),
+        "total_pages": totalPages,
+        "total_results": totalResults,
+    };
+}
+
+class Result {
+    bool adult;
+    String backdropPath;
+    List<int> genreIds;
+    int id;
+    OriginalLanguage originalLanguage;
+    String originalTitle;
+    String overview;
+    double popularity;
+    String posterPath;
+    DateTime releaseDate;
+    String title;
+    bool video;
+    double voteAverage;
+    int voteCount;
+
+    Result({
+        required this.adult,
+        required this.backdropPath,
+        required this.genreIds,
+        required this.id,
+        required this.originalLanguage,
+        required this.originalTitle,
+        required this.overview,
+        required this.popularity,
+        required this.posterPath,
+        required this.releaseDate,
+        required this.title,
+        required this.video,
+        required this.voteAverage,
+        required this.voteCount,
+    });
+
+    factory Result.fromJson(Map<String, dynamic> json) => Result(
+        adult: json["adult"],
+        backdropPath: json["backdrop_path"],
+        genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
+        id: json["id"],
+        originalLanguage: originalLanguageValues.map[json["original_language"]]!,
+        originalTitle: json["original_title"],
+        overview: json["overview"],
+        popularity: json["popularity"]?.toDouble(),
+        posterPath: json["poster_path"],
+        releaseDate: DateTime.parse(json["release_date"]),
+        title: json["title"],
+        video: json["video"],
+        voteAverage: json["vote_average"]?.toDouble(),
+        voteCount: json["vote_count"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "adult": adult,
+        "backdrop_path": backdropPath,
+        "genre_ids": List<dynamic>.from(genreIds.map((x) => x)),
+        "id": id,
+        "original_language": originalLanguageValues.reverse[originalLanguage],
+        "original_title": originalTitle,
+        "overview": overview,
+        "popularity": popularity,
+        "poster_path": posterPath,
+        "release_date": "${releaseDate.year.toString().padLeft(4, '0')}-${releaseDate.month.toString().padLeft(2, '0')}-${releaseDate.day.toString().padLeft(2, '0')}",
+        "title": title,
+        "video": video,
+        "vote_average": voteAverage,
+        "vote_count": voteCount,
+    };
+}
+
+enum OriginalLanguage {
+    DE,
+    EN,
+    KO
+}
+
+final originalLanguageValues = EnumValues({
+    "de": OriginalLanguage.DE,
+    "en": OriginalLanguage.EN,
+    "ko": OriginalLanguage.KO
+});
+
+class EnumValues<T> {
+    Map<String, T> map;
+    late Map<T, String> reverseMap;
+
+    EnumValues(this.map);
+
+    Map<T, String> get reverse {
+        reverseMap = map.map((k, v) => MapEntry(v, k));
+        return reverseMap;
+    }
 }

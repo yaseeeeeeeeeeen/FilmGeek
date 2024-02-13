@@ -1,16 +1,12 @@
 import 'package:filmgeek/repository/movie_repository.dart';
-import 'package:filmgeek/sevices/services.dart';
-import 'package:filmgeek/utils/colors.dart';
 import 'package:filmgeek/utils/image_urls.dart';
 import 'package:filmgeek/utils/validation.dart';
 import 'package:filmgeek/view/home_screen.dart';
-import 'package:filmgeek/view/signup_screen.dart';
 import 'package:filmgeek/widgets/app_title.dart';
 import 'package:filmgeek/widgets/button_and_textfield/custom_button.dart';
 import 'package:filmgeek/widgets/button_and_textfield/textfield_custom.dart';
 import 'package:filmgeek/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 // ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
@@ -57,26 +53,26 @@ class LoginPage extends StatelessWidget {
                       },
                       title: "LOGIN"),
                   SizedBox(height: media.height / 3.8),
-                  GestureDetector(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SignupScreen())),
-                    child: RichText(
-                      text: TextSpan(
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: 'Not a member? ',
-                              style: GoogleFonts.outfit(
-                                  color: black.withOpacity(0.5), fontSize: 15)),
-                          TextSpan(
-                              text: 'Sign-Up',
-                              style: GoogleFonts.outfit(
-                                  color: mainTheme,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600))
-                        ],
-                      ),
-                    ),
-                  )
+                  // GestureDetector(
+                  //   onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  //       builder: (context) => SignupScreen())),
+                  //   child: RichText(
+                  //     text: TextSpan(
+                  //       children: <TextSpan>[
+                  //         TextSpan(
+                  //             text: 'Not a member? ',
+                  //             style: GoogleFonts.outfit(
+                  //                 color: black.withOpacity(0.5), fontSize: 15)),
+                  //         TextSpan(
+                  //             text: 'Sign-Up',
+                  //             style: GoogleFonts.outfit(
+                  //                 color: mainTheme,
+                  //                 fontSize: 15,
+                  //                 fontWeight: FontWeight.w600))
+                  //       ],
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
             ),
@@ -87,28 +83,39 @@ class LoginPage extends StatelessWidget {
   }
 
   loginClicked(context) async {
-    if (loginKey.currentState!.validate()) {
-      bool isVerified = await DatabaseHelper.instance
-          .login(emailController.text, passwordController.text);
-      if (isVerified) {
-        final eitherResponse = await MovieRepository().getMovies();
-        eitherResponse.fold((left) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(customSnackbar(context, false, left.message));
-        }, (right) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) => HomeScreen(movieList: right),
-              ),
-              (route) => false);
-        });
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            customSnackbar(context, false, "Email or Password is Incorrect"));
-      }
+    final data = await MovieRepository().getMovies();
+    if (data != null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(customSnackbar(context, true, "Data Fetched"));
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => HomeScreen(movieList: data)),
+          (route) => false);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          customSnackbar(context, false, "Email or Password is Incorrect"));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(customSnackbar(context, false, "Something Wrong"));
     }
+    // if (loginKey.currentState!.validate()) {
+    //   bool isVerified = await DatabaseHelper.instance
+    //       .login(emailController.text, passwordController.text);
+    //   if (isVerified) {
+    //     final eitherResponse = await MovieRepository().getMovies();
+    //     eitherResponse.fold((left) {
+    //       ScaffoldMessenger.of(context)
+    //           .showSnackBar(customSnackbar(context, false, left.message));
+    //     }, (right) {
+    //       Navigator.of(context).pushAndRemoveUntil(
+    //           MaterialPageRoute(
+    //             builder: (context) => HomeScreen(movieList: right),
+    //           ),
+    //           (route) => false);
+    //     });
+    //   } else {
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //         customSnackbar(context, false, "Email or Password is Incorrect"));
+    //   }
+    // } else {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //       customSnackbar(context, false, "Email or Password is Incorrect"));
+    // }
   }
 }

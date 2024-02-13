@@ -1,4 +1,5 @@
 import 'package:filmgeek/model/movie_model.dart';
+import 'package:filmgeek/utils/api_urls.dart';
 import 'package:filmgeek/utils/colors.dart';
 import 'package:filmgeek/utils/font_styles.dart';
 import 'package:filmgeek/widgets/snack_bar.dart';
@@ -7,7 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class MovieCard extends StatelessWidget {
   MovieCard({super.key, required this.movie});
-  Movie movie;
+  Result movie;
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.sizeOf(context);
@@ -23,12 +24,12 @@ class MovieCard extends StatelessWidget {
             SizedBox(
               width: media.width / 8,
               height: media.height / 7,
-              child: Column(
+              child: const Column(
                 children: [
-                  const Icon(Icons.arrow_drop_up_sharp, size: 35),
-                  Text(movie.totalVoted.toString()),
-                  const Icon(Icons.arrow_drop_down, size: 35),
-                  const Text(
+                  Icon(Icons.arrow_drop_up_sharp, size: 35),
+                  Text("O"),
+                  Icon(Icons.arrow_drop_down, size: 35),
+                  Text(
                     "Votes",
                   )
                 ],
@@ -41,7 +42,9 @@ class MovieCard extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   image: DecorationImage(
-                      image: NetworkImage(movie.poster), fit: BoxFit.cover)),
+                      image: NetworkImage(
+                          "${ApiUrl.imageBase}${movie.posterPath}"),
+                      fit: BoxFit.cover)),
             ),
             Expanded(
                 child: Column(
@@ -54,26 +57,26 @@ class MovieCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  "Gener : ${movie.genre}",
+                  "Language : ${movie.originalLanguage}",
                   overflow: TextOverflow.ellipsis,
                   style: FontStyles.subTitles,
                 ),
                 Text(
                     overflow: TextOverflow.ellipsis,
                     style: FontStyles.subTitles,
-                    "Direction : ${movie.director.join()}"),
+                    "Orginal Title : ${movie.originalTitle}"),
+                // Text(
+                //     overflow: TextOverflow.ellipsis,
+                //     style: FontStyles.subTitles,
+                //     "Starring : ${movie..join()}"),
                 Text(
                     overflow: TextOverflow.ellipsis,
                     style: FontStyles.subTitles,
-                    "Starring : ${movie.stars.join()}"),
-                Text(
-                    overflow: TextOverflow.ellipsis,
-                    style: FontStyles.subTitles,
-                    "${movie.runTime ?? 129} Mins | ${movie.language} | 1 APR"),
+                    "${movie.popularity} Pop | ${movie.releaseDate}"),
                 Text(
                     overflow: TextOverflow.ellipsis,
                     style: FontStyles.subTitlesblue,
-                    "${movie.pageViews} views | Voted by ${movie.voting} People")
+                    "${movie.voteAverage} views | Voted by ${movie.voteCount} People")
               ],
             ))
           ]),

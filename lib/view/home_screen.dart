@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key, required this.movieList});
-  List<Movie> movieList;
+  Movie movieList;
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.sizeOf(context);
@@ -29,6 +29,7 @@ class HomeScreen extends StatelessWidget {
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Text(
+
                                     "Company Info",
                                     style: FontStyles.appbarTitle,
                                   ),
@@ -67,10 +68,10 @@ class HomeScreen extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                return MovieCard(movie: movieList[index]);
+                return MovieCard(movie: movieList.results[index]);
               },
               separatorBuilder: (context, index) => const Divider(),
-              itemCount: movieList.length),
+              itemCount: movieList.results.length),
         ),
       ),
     );
